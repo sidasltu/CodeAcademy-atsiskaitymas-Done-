@@ -17,21 +17,43 @@ const AddEdit = () => {
 
   const navigate = useNavigate();
 
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/get/${id}`)
+      .then((resp) => setState({ ...resp.data[0] }));
+  }, [id]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !email || !contact) {
       toast.error("Please fill all labels below");
     } else {
-      axios
-        .post("http://localhost:5000/api/post", {
-          name,
-          email,
-          contact
-        })
-        .then(() => {
-          setState({ name: "", email: "", contact: "" });
-        })
-        .catch((err) => toast.error(err.response.data));
+      if (!id) {
+        axios
+          .post("http://localhost:5000/api/post", {
+            name,
+            email,
+            contact,
+          })
+          .then(() => {
+            setState({ name: "", email: "", contact: "" });
+          })
+          .catch((err) => toast.error(err.response.data));
+      } else {
+        axios
+          .put(`http://localhost:5000/api/update/${id}`, {
+            name,
+            email,
+            contact,
+          })
+          .then(() => {
+            setState({ name: "", email: "", contact: "" });
+          })
+          .catch((err) => toast.error(err.response.data));
+      }
+
       setTimeout(() => navigate("/"), 500);
     }
   };
@@ -58,7 +80,7 @@ const AddEdit = () => {
           id="name"
           name="name"
           placeholder="Type Name..."
-          value={name}
+          value={name || ""}
           onChange={handleInputChange}
         />
         <label htmlFor="email">Email</label>
@@ -67,7 +89,7 @@ const AddEdit = () => {
           id="email"
           name="email"
           placeholder="Type Email..."
-          value={email}
+          value={email || ""}
           onChange={handleInputChange}
         />
         <label htmlFor="contact">Contact</label>
@@ -76,12 +98,12 @@ const AddEdit = () => {
           id="contact"
           name="contact"
           placeholder="Type contact number"
-          value={contact}
+          value={contact || ""}
           onChange={handleInputChange}
         />
-        
-          <input type="submit" value="save" />
-          <Link to="/">
+
+        <input type="submit" value={id ? "Update" : "Save"} />
+        <Link to="/">
           <input type="button" value="Go Back" />
         </Link>
       </form>

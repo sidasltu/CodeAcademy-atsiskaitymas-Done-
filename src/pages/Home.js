@@ -16,13 +16,13 @@ const Home = () => {
     loadData();
   }, []);
 
- const deleteContact = (id) => {
+  const deleteContact = (id) => {
     if (window.confirm("Are you sure to delete ?")) {
       axios.delete(`http://localhost:5000/api/remove/${id}`);
       toast.success("contact deleted successfully");
-     setTimeout(() => loadData(), 500);
-     }
-     };
+      setTimeout(() => loadData(), 500);
+    }
+  };
 
   return (
     <div style={{ marginTop: "150px" }}>
