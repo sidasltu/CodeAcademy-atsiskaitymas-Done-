@@ -26,13 +26,13 @@ const AddEdit = () => {
         .post("http://localhost:5000/api/post", {
           name,
           email,
-          contact,
+          contact
         })
         .then(() => {
           setState({ name: "", email: "", contact: "" });
         })
         .catch((err) => toast.error(err.response.data));
-      setTimeout(() => navigate.push("/"), 500);
+      setTimeout(() => navigate("/"), 500);
     }
   };
 
@@ -79,9 +79,9 @@ const AddEdit = () => {
           value={contact}
           onChange={handleInputChange}
         />
-        <Link to="/">
+        
           <input type="submit" value="save" />
-
+          <Link to="/">
           <input type="button" value="Go Back" />
         </Link>
       </form>
